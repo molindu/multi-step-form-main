@@ -29,7 +29,7 @@ function App() {
     });
 
     const {handleSubmit, trigger} = methods;
-    console.log("current step", currentStep);
+
     const nextStep = async () => {
         let isValid = true;
 
@@ -37,13 +37,12 @@ function App() {
             isValid = await trigger(['personalInfo.name', 'personalInfo.email', 'personalInfo.phone']);
         } else if (currentStep === 2) {
             isValid = await trigger('selectedPlan');
-        }
-        else if (currentStep === 3) {
-            isValid = await trigger('addOns');
+        } else if (currentStep === 3) {
+            // Step 3 doesn't require validation, just move to next step
+            isValid = true;
         }
 
-
-        if (isValid && currentStep <= 4) {
+        if (isValid && currentStep < 4) {
             setCurrentStep(currentStep + 1);
         }
     };
@@ -63,6 +62,10 @@ function App() {
         setIsSubmitted(true);
     };
 
+    const handleConfirm = () => {
+        handleSubmit(onSubmit)();
+    };
+
     const renderStep = () => {
         if (isSubmitted) {
             return <ThankYou/>;
@@ -76,7 +79,7 @@ function App() {
             case 3:
                 return <StepThree/>;
             case 4:
-                return <StepFour onChangePlan={goToStep2}/>;
+                return <StepFour onChangePlan={goToStep2} onConfirm={handleConfirm}/>;
             default:
                 return <StepOne/>;
         }
@@ -120,7 +123,7 @@ function App() {
                                 ) : (
                                     <button
                                         type="submit"
-                                        onClick={handleSubmit(onSubmit)}
+                                        onClick={handleConfirm}
                                         className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
                                     >
                                         Confirm
@@ -135,17 +138,16 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-blue-100 font-ubuntu flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl p-4 max-w-4xl w-full">
-                <div className="flex">
+        <div className="min-h-screen bg-blue-50 font-ubuntu flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl p-4 shadow-xl max-w-4xl w-full">
+                <div className="flex gap-8">
                     <div className="w-1/3">
                         <Sidebar currentStep={currentStep}/>
                     </div>
 
-                    <div className="flex-1 px-16 py-8 pr-12 ">
+                    <div className="flex-1 py-8 pr-8">
                         <FormProvider {...methods}>
-                            <form onSubmit={handleSubmit(onSubmit)}
-                                  className="h-full flex flex-col">
+                            <div className="h-full flex flex-col">
                                 <div className="flex-1">
                                     {renderStep()}
                                 </div>
@@ -168,21 +170,22 @@ function App() {
                                             <button
                                                 type="button"
                                                 onClick={nextStep}
-                                                className="bg-blue-950 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-80 transition-colors"
+                                                className="bg-blue-950 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
                                             >
                                                 Next Step
                                             </button>
                                         ) : (
                                             <button
-                                                type="submit"
-                                                className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-80 transition-colors"
+                                                type="button"
+                                                onClick={handleConfirm}
+                                                className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
                                             >
                                                 Confirm
                                             </button>
                                         )}
                                     </div>
                                 )}
-                            </form>
+                            </div>
                         </FormProvider>
                     </div>
                 </div>
