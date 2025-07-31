@@ -15,8 +15,8 @@ const steps = [
 export const Sidebar: React.FC<SidebarProps> = ({currentStep, isMobile = false}) => {
     if (isMobile) {
         return (
-            <div className="bg-gradient-to-r from-blue-300 to-purple-600 p-6 flex justify-center items-start">
-                <div className="flex space-x-4">
+            <div className="bg-sidebar-mobile bg-no-repeat bg-cover p-6 flex justify-center items-start">
+                <div className="flex space-x-4 mb-32">
                     {steps.map((step) => (
                         <div
                             key={step.number}

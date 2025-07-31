@@ -96,7 +96,7 @@ function App() {
             <div className="min-h-screen bg-blue-50 font-ubuntu">
                 <Sidebar currentStep={currentStep} isMobile={true} />
 
-                <div className="px-4 py-8">
+                <div className="px-4 py-8 -mt-32">
                     <div className="bg-white rounded-2xl p-6 shadow-lg">
                         <FormProvider {...methods}>
                             <form onSubmit={handleSubmit(onSubmit)}>
