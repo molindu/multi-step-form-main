@@ -82,7 +82,7 @@ export const StepOne: React.FC = () => {
             <input
                 type="tel"
                 id="phone"
-                placeholder="e.g. +1 234 567 890"
+                placeholder="e.g. +1 234567890"
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 ${
                     errors.personalInfo?.phone
                         ? 'border-red-500 focus:ring-red-500'
@@ -91,7 +91,7 @@ export const StepOne: React.FC = () => {
                 {...register('personalInfo.phone', {
                   required: 'This field is required',
                   pattern: {
-                    value: /^[\+]?[1-9][\d]{0,15}$/,
+                    value: /^\+\d{1,4}\s\d{6,14}$/,
                     message: 'Please enter a valid phone number'
                   },
                   minLength: {
