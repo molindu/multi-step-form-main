@@ -1,18 +1,18 @@
-import {useState} from 'react';
-import {useForm, FormProvider} from 'react-hook-form';
-import {FormData} from './types/form';
-import {Sidebar} from './components/Sidebar';
-import {StepOne} from './components/StepOne';
-import {StepTwo} from './components/StepTwo';
-import {StepThree} from './components/StepThree';
-import {StepFour} from './components/StepFour';
-import {ThankYou} from './components/ThankYou';
-import {useWindowSize} from './hooks/useWindowSize';
+import { useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { FormData } from './types/form';
+import { Sidebar } from './components/Sidebar';
+import { StepOne } from './components/StepOne';
+import { StepTwo } from './components/StepTwo';
+import { StepThree } from './components/StepThree';
+import { StepFour } from './components/StepFour';
+import { ThankYou } from './components/ThankYou';
+import { useWindowSize } from './hooks/useWindowSize';
 
 function App() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const {width} = useWindowSize();
+    const { width } = useWindowSize();
     const isMobile = width < 768;
 
     const methods = useForm<FormData>({
@@ -28,7 +28,7 @@ function App() {
         }
     });
 
-    const {handleSubmit, trigger} = methods;
+    const { handleSubmit, trigger, watch } = methods;
 
     const nextStep = async () => {
         let isValid = true;
@@ -38,8 +38,14 @@ function App() {
         } else if (currentStep === 2) {
             isValid = await trigger('selectedPlan');
         } else if (currentStep === 3) {
-            // Step 3 doesn't require validation, just move to next step
-            isValid = true;
+            // Step 3 requires at least one add-on to be selected
+            const addOns = watch('addOns') || [];
+            isValid = addOns.length > 0;
+
+            if (!isValid) {
+                // You could add a toast notification or error state here
+                console.log('Please select at least one add-on');
+            }
         }
 
         if (isValid && currentStep < 4) {
@@ -68,27 +74,27 @@ function App() {
 
     const renderStep = () => {
         if (isSubmitted) {
-            return <ThankYou/>;
+            return <ThankYou />;
         }
 
         switch (currentStep) {
             case 1:
-                return <StepOne/>;
+                return <StepOne />;
             case 2:
-                return <StepTwo/>;
+                return <StepTwo />;
             case 3:
-                return <StepThree/>;
+                return <StepThree />;
             case 4:
-                return <StepFour onChangePlan={goToStep2} onConfirm={handleConfirm}/>;
+                return <StepFour onChangePlan={goToStep2} onConfirm={handleConfirm} />;
             default:
-                return <StepOne/>;
+                return <StepOne />;
         }
     };
 
     if (isMobile) {
         return (
             <div className="min-h-screen bg-blue-50 font-ubuntu">
-                <Sidebar currentStep={currentStep} isMobile={true}/>
+                <Sidebar currentStep={currentStep} isMobile={true} />
 
                 <div className="px-4 py-8">
                     <div className="bg-white rounded-2xl p-6 shadow-lg">
@@ -116,7 +122,12 @@ function App() {
                                     <button
                                         type="button"
                                         onClick={nextStep}
-                                        className="bg-blue-950 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
+                                        className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                                            currentStep === 3 && (!watch('addOns') || watch('addOns').length === 0)
+                                                ? 'bg-grey-500 text-white cursor-not-allowed'
+                                                : 'bg-blue-950 text-white hover:bg-opacity-90'
+                                        }`}
+                                        disabled={currentStep === 3 && (!watch('addOns') || watch('addOns').length === 0)}
                                     >
                                         Next Step
                                     </button>
@@ -142,7 +153,7 @@ function App() {
             <div className="bg-white rounded-2xl p-4 shadow-xl max-w-4xl w-full">
                 <div className="flex gap-8">
                     <div className="w-1/3">
-                        <Sidebar currentStep={currentStep}/>
+                        <Sidebar currentStep={currentStep} />
                     </div>
 
                     <div className="flex-1 py-8 pr-8">
@@ -170,7 +181,12 @@ function App() {
                                             <button
                                                 type="button"
                                                 onClick={nextStep}
-                                                className="bg-blue-950 text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
+                                                className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                                                    currentStep === 3 && (!watch('addOns') || watch('addOns').length === 0)
+                                                        ? 'bg-grey-500 text-white cursor-not-allowed'
+                                                        : 'bg-blue-950 text-white hover:bg-opacity-90'
+                                                }`}
+                                                disabled={currentStep === 3 && (!watch('addOns') || watch('addOns').length === 0)}
                                             >
                                                 Next Step
                                             </button>
