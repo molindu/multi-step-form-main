@@ -93,7 +93,7 @@ function App() {
 
     if (isMobile) {
         return (
-            <div className="min-h-screen bg-blue-50 font-ubuntu">
+            <div className="min-h-screen bg-blue-100 font-ubuntu">
                 <Sidebar currentStep={currentStep} isMobile={true} />
 
                 <div className="px-4 py-8 -mt-32">
@@ -149,8 +149,8 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-blue-50 font-ubuntu flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl p-4 shadow-xl max-w-4xl w-full">
+        <div className="min-h-screen bg-blue-100 font-ubuntu flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl p-4 max-w-4xl w-full">
                 <div className="flex gap-8">
                     <div className="w-1/3">
                         <Sidebar currentStep={currentStep} />
