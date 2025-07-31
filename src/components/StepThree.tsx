@@ -4,7 +4,7 @@ import { FormData } from '../types/form';
 import { addOns } from '../data/addOns';
 
 export const StepThree: React.FC = () => {
-    const { register, watch, formState: { errors } } = useFormContext<FormData>();
+    const { register, watch } = useFormContext<FormData>();
     const selectedAddOns = watch('addOns') || [];
     const isYearly = watch('isYearly');
 

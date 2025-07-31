@@ -9,7 +9,7 @@ interface StepFourProps {
     onConfirm: () => void;
 }
 
-export const StepFour: React.FC<StepFourProps> = ({onChangePlan, onConfirm}) => {
+export const StepFour: React.FC<StepFourProps> = ({onChangePlan}) => {
     const {watch} = useFormContext<FormData>();
     const selectedPlan = watch('selectedPlan');
     const selectedAddOns = watch('addOns') || [];
